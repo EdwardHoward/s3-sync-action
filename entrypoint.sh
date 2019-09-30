@@ -27,6 +27,11 @@ if [ -z "$SOURCE_DIR" ]; then
   SOURCE_DIR="."
 fi
 
+# Default to bucket root if DEST_DIR not set.
+if [ -z "$DEST_DIR" ]; then
+  DEST_DIR=""
+fi
+
 # Create a dedicated profile for this action to avoid
 # conflicts with other actions.
 # https://github.com/jakejarvis/s3-sync-action/issues/1
@@ -39,6 +44,6 @@ EOF
 
 # Use our dedicated profile and suppress verbose messages.
 # All other flags are optional via `args:` directive.
-sh -c "aws s3 sync ${SOURCE_DIR} s3://${AWS_S3_BUCKET} \
+sh -c "aws s3 sync ${SOURCE_DIR} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
               --profile s3-sync-action \
               --no-progress $*"
